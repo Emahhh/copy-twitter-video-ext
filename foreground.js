@@ -61,8 +61,6 @@ async function tryAddButton() {
         return;
     }
 
-    setTimeout(tryAddButton, 1000);
-
     const regex = /^https:\/\/twitter\.com\/[^/]+\/status\/\d+$/;
     if (!regex.test(window.location.href)) {
         //alert('Not a tweet page!');
@@ -120,21 +118,22 @@ async function tryAddButton() {
 }
 
 
+
+
+// MAIN -------
+// calling the tryAddButton() in different ways
+
 tryAddButton();
 
-
 function addLocationObserver(callback) {
-
     // Options for the observer (which mutations to observe)
-    const config = { attributes: false, childList: true, subtree: false }
+    const config = { attributes: false, childList: true, subtree: true };
 
     // Create an observer instance linked to the callback function
     const observer = new MutationObserver(callback)
 
     // Start observing the target node for configured mutations
-    observer.observe(document.body, config)
+    observer.observe(document.querySelector('body'), config);
 }
-
-
 
 addLocationObserver(tryAddButton);
