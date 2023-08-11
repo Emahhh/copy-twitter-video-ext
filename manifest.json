@@ -1,8 +1,8 @@
 {
     // Comments are accepted in the manifest, even though it is JSON.
     "manifest_version": 3,
-    "name": "Chrome Extension v3 Starter",
-    "description": "A minimal example of a chrome extension using manifest v3",
+    "name": "Copy video URL X",
+    "description": "Copy the URL of a video on Twitter or X to the clipboard.",
     "version": "0.0.1",
     "icons": {
         "16": "logo/logo-16.png",
@@ -11,18 +11,19 @@
     },
     "options_page": "settings/settings.html",
     "action": {
-        "default_title": "Chrome Addon v3 Starter",
+        "default_title": "Click to copy",
         "default_popup": "popup/popup.html"
     },
-    "permissions": [],
+    "permissions": [ "clipboardWrite" ],
     "host_permissions": [
-        "*://*/*"
+        "https://*.twitter.com/*",
+        "https://*.x.com/*"
     ],
     "background": {
         "service_worker": "service-worker.js"
     },
     "content_scripts": [{
         "js": ["foreground.js"],
-        "matches": ["https://github.com/*"]
+        "matches": ["https://*.twitter.com/*", "https://*.x.com/*"]
     }]
 }
