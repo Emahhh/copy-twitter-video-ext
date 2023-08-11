@@ -24,6 +24,7 @@
     },
     "content_scripts": [{
         "js": ["foreground.js"],
+        "css": ["styles.css"],
         "matches": ["https://*.twitter.com/*", "https://*.x.com/*"]
     }]
 }

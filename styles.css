@@ -1,0 +1,42 @@
+#buttonsContainer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+}
+
+#downloadVideoButton,
+#copyVideoURLButton {
+    background-color: #ff6b6b43;
+    border: none;
+    color: white;
+    padding: 8px 16px; /* Adjust padding for smaller buttons */
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.391);
+
+    font-size: 14px; /* Slightly smaller font size */
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    margin-right: 10px;
+    z-index: 9999;
+}
+
+#downloadVideoButton::before,
+#copyVideoURLButton::before {
+    margin-right: 5px;
+}
+
+#downloadVideoButton::before {
+    content: "\1F4BE"; /* Unicode for a download icon (you can replace with your desired icon) */
+}
+
+#copyVideoURLButton::before {
+    content: "\1F517"; /* Unicode for a copy icon (you can replace with your desired icon) */
+}
+
+#downloadVideoButton:hover,
+#copyVideoURLButton:hover {
+    background-color: #ff4e4eab;
+}

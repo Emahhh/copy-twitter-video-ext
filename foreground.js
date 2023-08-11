@@ -4,14 +4,23 @@
 // Several foreground scripts can be declared
 // and injected into the same or different pages.
 
+
 function writeOnClipboard(newClip) {
     navigator.clipboard.writeText(newClip).then(
         () => {
             /* clipboard successfully set */
-            alert(`Copied succesfully to clipboard:\n${newClip}`); // TODO: remove this alert. give some w the button
+            //alert(`Copied succesfully to clipboard:\n${newClip}`);
+            const copyButton = document.getElementById("copyVideoURLButton");
+            copyButton.innerHTML = "Copied!";
+
+            setTimeout(() => {
+                document.getElementById("copyVideoURLButton").innerHTML = "Copy";
+
+            }, 2000);
+
         },
         () => {
-            alert(`Error while copying this text:\n${newClip}`);
+            //alert(`Error while copying this text:\n${newClip}`);
         }
     );
 }
@@ -29,6 +38,16 @@ function copyLinkInTitle() {
     } else {
         alert('No media URL found');
     }
+}
+
+async function downloadVideo() {
+    let mediaURL = window.location.href;
+    if (!mediaURL) {
+        alert('Error: no media URL found');
+        return;
+    }
+    let dlURL = mediaURL.replace('https://twitter.com', 'https://x2twitter.com');
+    window.open(dlURL, '_blank');
 }
 
 
@@ -68,12 +87,36 @@ async function tryAddButton() {
         return;
     }
 
-    let button = document.createElement("button");
-    button.innerHTML = "Copy video URL";
-    button.id = "copyVideoURLButton";
-    button.addEventListener("click", copyLinkInTitle);
-    // add button to the top right of the div player
-    ftwVideo.prepend(button);
+
+    // Create a flexbox container for the buttons
+    let buttonsContainer = document.createElement("div");
+    buttonsContainer.id = "buttonsContainer";
+
+    // COPY BUTTON
+    let copyButtonHTML = `<button id="copyVideoURLButton">Copy</button>`;
+
+    let copyButton = document.createElement("div");
+    copyButton.innerHTML = copyButtonHTML;
+    copyButton = copyButton.firstElementChild;
+
+    copyButton.addEventListener("click", copyLinkInTitle);
+
+    buttonsContainer.appendChild(copyButton);
+
+    // DOWNLOAD BUTTON
+    let downloadButtonHTML = `<button id="downloadVideoButton">Download</button>`;
+
+    let downloadButton = document.createElement("div");
+    downloadButton.innerHTML = downloadButtonHTML;
+    downloadButton = downloadButton.firstElementChild;
+
+    downloadButton.addEventListener("click", downloadVideo);
+
+    buttonsContainer.appendChild(downloadButton);
+
+    // Add the buttons container to the top right of the div player
+    ftwVideo.prepend(buttonsContainer);
+
 }
 
 
@@ -84,14 +127,14 @@ function addLocationObserver(callback) {
 
     // Options for the observer (which mutations to observe)
     const config = { attributes: false, childList: true, subtree: false }
-  
+
     // Create an observer instance linked to the callback function
     const observer = new MutationObserver(callback)
-  
+
     // Start observing the target node for configured mutations
     observer.observe(document.body, config)
-  }
-  
+}
 
-  
-  addLocationObserver(tryAddButton);
+
+
+addLocationObserver(tryAddButton);
