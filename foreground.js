@@ -8,7 +8,7 @@ function writeOnClipboard(newClip) {
     navigator.clipboard.writeText(newClip).then(
         () => {
             /* clipboard successfully set */
-            alert(`Copied succesfully to clipboard:\n${newClip}`);
+            alert(`Copied succesfully to clipboard:\n${newClip}`); // TODO: remove this alert. give some w the button
         },
         () => {
             alert(`Error while copying this text:\n${newClip}`);
@@ -33,31 +33,65 @@ function copyLinkInTitle() {
 
 
 
-
 async function tryAddButton() {
-    if (getMediaURL()) {
-        let button = document.createElement("button");
-        button.innerHTML = "Copy video URL";
-        button.addEventListener("click", copyLinkInTitle);
-        // Style
-        button.style.position = "fixed";
-        button.style.bottom = "0";
-        button.style.right = "0";
-        button.style.zIndex = "9999";
+    console.log('tryAddButton()');
 
-        document.body.appendChild(button);
-    } else {
-        alert('No media URL found! I found this: ' + document.title);
+    if (document.getElementById("copyVideoURLButton")) {
+        //alert('Button already added!');
+        console.log('Button already added!');
+        return;
     }
+
+    setTimeout(tryAddButton, 1000);
+
+    const regex = /^https:\/\/twitter\.com\/[^/]+\/status\/\d+$/;
+    if (!regex.test(window.location.href)) {
+        //alert('Not a tweet page!');
+        console.log('Not a tweet page!');
+        return;
+    }
+    if (!getMediaURL()) {
+        //alert('No media URL found! I found this: ' + document.title);
+        console.log('No media URL found! I found this: ' + document.title);
+        return;
+    }
+
+
+    const firstTweet = document.querySelectorAll('article[data-testid="tweet"]')[0];
+    if (!firstTweet) {
+        console.log('No tweet found!');
+        return;
+    }
+    const ftwVideo = firstTweet.querySelectorAll('div[data-testid="videoPlayer"]')[0];
+    if (!ftwVideo) {
+        console.log('No video found!');
+        return;
+    }
+
+    let button = document.createElement("button");
+    button.innerHTML = "Copy video URL";
+    button.id = "copyVideoURLButton";
+    button.addEventListener("click", copyLinkInTitle);
+    // add button to the top right of the div player
+    ftwVideo.prepend(button);
 }
 
 
-    let waitForTitleInterval = setInterval(function () {
-        if (document.title) {
-            clearInterval(waitForTitleInterval); // Stop the interval once the title is loaded
-            tryAddButton();
-        } else {
-            console.log('Waiting for title');
-        }
-    }, 100);
+tryAddButton();
 
+
+function addLocationObserver(callback) {
+
+    // Options for the observer (which mutations to observe)
+    const config = { attributes: false, childList: true, subtree: false }
+  
+    // Create an observer instance linked to the callback function
+    const observer = new MutationObserver(callback)
+  
+    // Start observing the target node for configured mutations
+    observer.observe(document.body, config)
+  }
+  
+
+  
+  addLocationObserver(tryAddButton);
