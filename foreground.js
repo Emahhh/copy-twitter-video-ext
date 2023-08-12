@@ -20,7 +20,8 @@ function writeOnClipboard(newClip) {
 
         },
         () => {
-            //alert(`Error while copying this text:\n${newClip}`);
+            alert(`Error.`);
+            console.log(`Error while copying this text:\n${newClip}`);
         }
     );
 }
@@ -53,22 +54,20 @@ async function downloadVideo() {
 
 
 async function tryAddButton() {
-    console.log('tryAddButton()');
+    // console.log('tryAddButton()');
 
     if (document.getElementById("copyVideoURLButton")) {
-        //alert('Button already added!');
         console.log('Button already added!');
         return;
     }
 
     const regex = /^https:\/\/twitter\.com\/[^/]+\/status\/\d+$/;
-    if (!regex.test(window.location.href)) {
-        //alert('Not a tweet page!');
+    const regexX = /^https:\/\/x\.com\/[^/]+\/status\/\d+$/;
+    if (!regex.test(window.location.href) && !regex2.test(window.location.href)) {
         console.log('Not a tweet page!');
         return;
     }
     if (!getMediaURL()) {
-        //alert('No media URL found! I found this: ' + document.title);
         console.log('No media URL found! I found this: ' + document.title);
         return;
     }
