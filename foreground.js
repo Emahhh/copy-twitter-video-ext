@@ -51,6 +51,14 @@ async function downloadVideo() {
     window.open(dlURL, '_blank');
 }
 
+async function getButtonColor() {
+    const postBtn =  document.querySelectorAll('a[data-testid="SideNav_NewTweet_Button"]')[0];
+    if (!postBtn) return null;
+
+    const postBtnColor = window.getComputedStyle(postBtn).backgroundColor;
+    return postBtnColor;
+}
+
 
 
 async function tryAddButton() {
@@ -63,7 +71,7 @@ async function tryAddButton() {
 
     const regex = /^https:\/\/twitter\.com\/[^/]+\/status\/\d+$/;
     const regexX = /^https:\/\/x\.com\/[^/]+\/status\/\d+$/;
-    if (!regex.test(window.location.href) && !regex2.test(window.location.href)) {
+    if (!regex.test(window.location.href) && !regexX.test(window.location.href)) {
         console.log('Not a tweet page!');
         return;
     }
@@ -110,6 +118,34 @@ async function tryAddButton() {
     downloadButton.addEventListener("click", downloadVideo);
 
     buttonsContainer.appendChild(downloadButton);
+
+    // STYLE
+    let buttonColor = await getButtonColor();
+    if (buttonColor) {
+        // Make it 50% transparent
+        let buttonColorTransp = buttonColor.replace(')', ', 0.6)');
+
+ 
+        let style = document.createElement('style');
+        let cssRule = `
+            #downloadVideoButton,
+            #copyVideoURLButton {
+                background-color: ${buttonColorTransp};
+            }
+
+            #downloadVideoButton:hover,
+            #copyVideoURLButton:hover {
+                background-color: ${buttonColor};
+            }
+        `;
+    
+        // Append the CSS rule to the style element
+        style.appendChild(document.createTextNode(cssRule));
+        document.head.appendChild(style);
+    }
+    
+
+
 
     // Add the buttons container to the top right of the div player
     ftwVideo.prepend(buttonsContainer);
